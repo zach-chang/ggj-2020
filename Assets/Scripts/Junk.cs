@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class Junk : MonoBehaviour, IPointerDownHandler
 {
-    public static float rotationSpeed = 300f;
+    public static float rotationSpeed = 200f;
     private Rigidbody2D rb2d;
     private TargetJoint2D tj2d;
 
@@ -26,28 +26,33 @@ public class Junk : MonoBehaviour, IPointerDownHandler
     {
         tj2d.enabled = false;
         rb2d.constraints = RigidbodyConstraints2D.None;
-        rb2d.velocity = new Vector2();
+        //rb2d.velocity = new Vector2();
     }
 
     public void Select()
     {
         tj2d.enabled = true;
         rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        tj2d.anchor = transform.InverseTransformPoint(mousePos);
+
         PlayerController.SetJunk(this);
     }
 
     public void OnPointerDown(PointerEventData data)
     {
+        if (!GameController.active) return;
         Select();
     }
 
     public void Rotate(float rotate)
     {
         float deg = rb2d.rotation;
-        Debug.Log("Rotation is currently " + deg);
+        //Debug.Log("Rotation is currently " + deg);
         deg += (-1 * rotate * rotationSpeed * Time.deltaTime);
-        Debug.Log("Attempting to set rotation to " + deg);
+        //Debug.Log("Attempting to set rotation to " + deg);
         rb2d.SetRotation(deg);
-        Debug.Log("Rotation is now " + rb2d.rotation);
+        //Debug.Log("Rotation is now " + rb2d.rotation);
     }
 }

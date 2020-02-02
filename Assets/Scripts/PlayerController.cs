@@ -21,9 +21,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
+        if (!GameController.active || Input.GetMouseButtonUp(0))
         {
-            Debug.Log("Mouse up!");
+            //Debug.Log("Mouse up!");
             if (selected) selected.Deselect();
             selected = null;
         }
