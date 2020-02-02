@@ -30,7 +30,7 @@ public class SpawnController : MonoBehaviour
     public void Spawn()
     {
         int index = Random.Range(0, junkPrefabs.Length);
-        Instantiate(junkPrefabs[index], transform.position, Quaternion.identity);
+        Instantiate(junkPrefabs[index], transform.position, Quaternion.Euler(0, 0, Random.Range(0,359)));
         pastTime = Time.time;
     }
 

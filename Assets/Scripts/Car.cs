@@ -7,9 +7,15 @@ public class Car : MonoBehaviour
     public static Car instance;
 
     private bool driving = false;
+    private bool crashed = false;
     private Rigidbody2D rb2d;
-    public static float drivingForce = 8f;
-    public static float topSpeed = 6f;
+    public static float drivingForce = 12f;
+    public static float topSpeed = 10f;
+
+    private AudioSource asource;
+    public AudioClip crash;
+    public AudioClip ohno;
+    public AudioClip drive;
 
     public GameObject explosion;
 
@@ -19,16 +25,22 @@ public class Car : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         driving = false;
         instance = this;
+        asource = GetComponent<AudioSource>();
     }
 
     public void Drive()
     {
         driving = true;
+        asource.clip = drive;
+        asource.Play();
     }
 
     public void Brakes()
     {
+        if (!driving) return;
         driving = false;
+        if (asource.clip == drive) asource.Stop();
+        GameController.Play(ohno);
     }
 
     // Update is called once per frame
@@ -70,8 +82,12 @@ public class Car : MonoBehaviour
 
     public void GoBoom(Vector2 point)
     {
+        if (crashed) return;
         //Instantiate(explosion, transform.position, Quaternion.identity);
         GameController.instance.GameOver();
+        asource.clip = crash;
+        asource.Play();
+        crashed = true;
         //Destroy(gameObject);
     }
 
